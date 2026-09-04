@@ -34,28 +34,27 @@ export default function Home() {
         
         {/* Hero Section */}
         <div className="w-full flex flex-col items-center text-center mt-24 mb-32 sliding">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/30 border border-white/50 backdrop-blur-md mb-8 text-sm font-semibold text-gray-800 shadow-sm hover:bg-white/40 transition-colors">
-            <Zap className="w-4 h-4 text-yellow-500" />
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/30 border border-white/50 backdrop-blur-md mb-8 text-xs font-semibold text-gray-800 shadow-sm hover:bg-white/40 transition-colors">
             Live on GenLayer Studio Network
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tighter mb-6 leading-tight">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 tracking-tighter mb-4 leading-tight">
             The Future of <br className="hidden md:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-pink-600">
               Decentralized Grants
             </span>
           </h1>
           
-          <p className="text-xl text-gray-700 max-w-2xl font-medium mb-10 leading-relaxed">
+          <p className="text-lg text-gray-700 max-w-xl font-medium mb-8 leading-relaxed">
             DistriNova uses GenLayer Intelligent Contracts to autonomously verify real-world startup milestones and securely release funds.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <Link href="/dashboard" className="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 text-white rounded-full font-bold shadow-xl hover:bg-gray-800 hover:-translate-y-1 transition-all duration-300">
+            <Link href="/dashboard" className="inline-flex items-center gap-2 px-6 py-3 text-sm bg-gray-900 text-white rounded-full font-bold shadow-xl hover:bg-gray-800 hover:-translate-y-1 transition-all duration-300">
               Explore Dashboard
               <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/faq" className="inline-flex items-center gap-2 px-8 py-4 bg-white/40 backdrop-blur-md border border-white/60 text-gray-900 rounded-full font-bold shadow-sm hover:bg-white/60 transition-all duration-300">
+            <Link href="/faq" className="inline-flex items-center gap-2 px-6 py-3 text-sm bg-white/40 backdrop-blur-md border border-white/60 text-gray-900 rounded-full font-bold shadow-sm hover:bg-white/60 transition-all duration-300">
               Learn More
             </Link>
           </div>
