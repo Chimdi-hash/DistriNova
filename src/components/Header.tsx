@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useWallet } from "../context/WalletContext";
-import { Wallet, LogOut, LayoutDashboard, HelpCircle, History, Sparkles } from "lucide-react";
+import { Wallet, LogOut } from "lucide-react";
 
 export default function Header() {
   const { isConnected, walletAddress, balance, connectWallet, disconnectWallet } = useWallet();
@@ -15,23 +15,22 @@ export default function Header() {
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="flex items-center gap-2 font-extrabold text-xl tracking-tight text-gray-900 hover:opacity-80 transition-opacity">
-              <Sparkles className="w-5 h-5 text-blue-600" />
               <span>Distri<span className="text-white drop-shadow-sm">Nova</span></span>
             </Link>
           </div>
 
           {/* Navigation */}
           <nav className="hidden md:flex space-x-8">
-            <Link href="/dashboard" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium flex items-center gap-2">
-              <LayoutDashboard className="w-4 h-4" />
+            <Link href="/" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
+              Home
+            </Link>
+            <Link href="/dashboard" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
               Dashboard
             </Link>
-            <Link href="/submissions" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium flex items-center gap-2">
-              <History className="w-4 h-4" />
+            <Link href="/submissions" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
               Recent Submissions
             </Link>
-            <Link href="/faq" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium flex items-center gap-2">
-              <HelpCircle className="w-4 h-4" />
+            <Link href="/faq" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
               FAQ
             </Link>
           </nav>
