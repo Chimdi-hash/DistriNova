@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, Cpu, ShieldCheck, Zap, History, CheckCircle } from "lucide-react";
-import { genlayerClient } from "../../lib/genlayer";
+import { genlayerClient } from "../lib/genlayer";
 
 export default function Home() {
   const [grantCount, setGrantCount] = useState<number>(0);
