@@ -47,34 +47,31 @@ export default function Home() {
       <div className="z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         
         {/* Hero Section */}
-        <div className="w-full mt-24 mb-32 sliding relative grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        <div className="w-full flex flex-col items-start text-left mt-24 mb-16 sliding -ml-4 md:-ml-12 lg:-ml-20 relative z-20">
           
-          {/* Left Column: Text */}
-          <div className="flex flex-col items-start text-left -ml-4 md:-ml-12 lg:-ml-20 z-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/30 border border-white/50 backdrop-blur-md mb-8 text-xs font-semibold text-gray-800 shadow-sm hover:bg-white/40 transition-colors">
-              Live on GenLayer Studio Network
-            </div>
-            
-            <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tighter mb-6 leading-tight max-w-2xl">
-              The Future of <br className="hidden xl:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-pink-600 drop-shadow-sm">
-                Decentralized Grants
-              </span>
-            </h1>
-            
-            <p className="text-xl text-gray-700 max-w-xl font-medium mb-10 leading-relaxed">
-              DistriNova uses GenLayer Intelligent Contracts to autonomously verify real-world startup milestones and securely release funds.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 items-start">
-              <Link href="/dashboard" className="inline-flex items-center gap-2 px-8 py-3 text-sm bg-gray-900 text-white rounded-full font-bold shadow-xl hover:bg-gray-800 hover:translate-x-1 transition-all duration-300 group">
-                Explore Dashboard
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link href="/faq" className="inline-flex items-center gap-2 px-8 py-3 text-sm bg-white/40 backdrop-blur-md border border-white/60 text-gray-900 rounded-full font-bold shadow-sm hover:bg-white/60 hover:translate-x-1 transition-all duration-300">
-                Learn More
-              </Link>
-            </div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/30 border border-white/50 backdrop-blur-md mb-8 text-xs font-semibold text-gray-800 shadow-sm hover:bg-white/40 transition-colors">
+            Live on GenLayer Studio Network
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tighter mb-6 leading-tight max-w-2xl">
+            The Future of <br className="hidden xl:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-pink-600 drop-shadow-sm">
+              Decentralized Grants
+            </span>
+          </h1>
+          
+          <p className="text-xl text-gray-700 max-w-xl font-medium mb-10 leading-relaxed border-l-2 border-blue-500/30 pl-4 ml-1">
+            DistriNova uses GenLayer Intelligent Contracts to autonomously verify real-world startup milestones and securely release funds.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 items-start">
+            <Link href="/dashboard" className="inline-flex items-center gap-2 px-8 py-3 text-sm bg-gray-900 text-white rounded-full font-bold shadow-xl hover:bg-gray-800 hover:translate-x-1 transition-all duration-300 group">
+              Explore Dashboard
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <Link href="/faq" className="inline-flex items-center gap-2 px-8 py-3 text-sm bg-white/40 backdrop-blur-md border border-white/60 text-gray-900 rounded-full font-bold shadow-sm hover:bg-white/60 hover:translate-x-1 transition-all duration-300">
+              Learn More
+            </Link>
           </div>
         </div>
 
