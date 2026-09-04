@@ -31,13 +31,15 @@ export default function Home() {
       </div>
       
       {/* Full-bleed Hero Image on the Right */}
-      <div className="absolute right-0 top-16 h-[500px] lg:h-[600px] w-full md:w-[60%] lg:w-[50%] z-0 hidden md:block">
+      <div className="absolute right-0 top-0 h-[450px] md:h-[550px] w-full md:w-[70%] lg:w-[60%] z-0 hidden md:block">
          <div 
-           className="absolute inset-0 w-full h-full bg-no-repeat bg-center bg-cover"
+           className="absolute inset-0 w-full h-full bg-no-repeat"
            style={{ 
              backgroundImage: "url('/hero.jpeg')",
-             WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 50%)",
-             maskImage: "linear-gradient(to right, transparent 0%, black 50%)"
+             backgroundSize: "cover",
+             backgroundPosition: "center right",
+             WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 25%)",
+             maskImage: "linear-gradient(to right, transparent 0%, black 25%)"
            }}
          ></div>
       </div>
