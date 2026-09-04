@@ -29,6 +29,18 @@ export default function Home() {
         <div className="absolute top-[30%] right-[10%] w-[400px] h-[400px] bg-pink-300 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 floating" style={{ animationDuration: "10s", animationDelay: "2s" }}></div>
         <div className="absolute bottom-[10%] left-[40%] w-[600px] h-[600px] bg-white rounded-full mix-blend-overlay filter blur-[150px] opacity-50 floating" style={{ animationDuration: "12s", animationDelay: "4s" }}></div>
       </div>
+      
+      {/* Full-bleed Hero Image on the Right */}
+      <div className="absolute right-0 top-16 h-[500px] lg:h-[600px] w-full md:w-[60%] lg:w-[50%] z-0 hidden md:block">
+         <div 
+           className="absolute inset-0 w-full h-full bg-no-repeat bg-center bg-cover"
+           style={{ 
+             backgroundImage: "url('/hero.jpeg')",
+             WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 50%)",
+             maskImage: "linear-gradient(to right, transparent 0%, black 50%)"
+           }}
+         ></div>
+      </div>
 
       <div className="z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         
@@ -61,19 +73,6 @@ export default function Home() {
                 Learn More
               </Link>
             </div>
-          </div>
-
-          {/* Right Column: Hero Image with fade to left */}
-          <div className="relative h-[400px] md:h-[500px] w-full z-10 flex justify-end">
-             {/* The mask-image makes it fade to transparent towards the left */}
-             <div 
-               className="absolute inset-0 right-0 w-full h-full bg-no-repeat bg-right bg-cover rounded-[2rem] shadow-2xl"
-               style={{ 
-                 backgroundImage: "url('/hero.jpeg')",
-                 WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 50%)",
-                 maskImage: "linear-gradient(to right, transparent 0%, black 50%)"
-               }}
-             ></div>
           </div>
         </div>
 
