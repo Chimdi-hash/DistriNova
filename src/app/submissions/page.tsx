@@ -39,14 +39,14 @@ export default function Submissions() {
   return (
     <div className="w-full min-h-screen relative overflow-hidden">
       
-      {/* Faded Background Image */}
+      {/* Faded Background Image - opacity increased to make it clearer */}
       <div 
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20"
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-40"
         style={{ backgroundImage: "url('/recent_submissions.jpeg')" }}
       ></div>
       
-      {/* Optional overlay to soften the image further against text */}
-      <div className="absolute inset-0 z-0 bg-white/40 backdrop-blur-sm"></div>
+      {/* Subtle overlay to soften the image slightly without hiding it */}
+      <div className="absolute inset-0 z-0 bg-white/20 backdrop-blur-[2px]"></div>
 
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
       
