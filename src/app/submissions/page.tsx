@@ -37,13 +37,24 @@ export default function Submissions() {
   ];
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative">
+    <div className="w-full min-h-screen relative overflow-hidden">
       
-      {/* Futuristic Background Accents */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-[120px] opacity-20 floating"></div>
-      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-[120px] opacity-20 floating" style={{ animationDelay: "2s" }}></div>
+      {/* Faded Background Image */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20"
+        style={{ backgroundImage: "url('/recent_submissions.jpeg')" }}
+      ></div>
+      
+      {/* Optional overlay to soften the image further against text */}
+      <div className="absolute inset-0 z-0 bg-white/40 backdrop-blur-sm"></div>
 
-      <div className="mb-12 relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+      
+        {/* Futuristic Background Accents */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-[120px] opacity-20 floating"></div>
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-[120px] opacity-20 floating" style={{ animationDelay: "2s" }}></div>
+
+        <div className="mb-12 relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/40 border border-white/60 backdrop-blur-md mb-4 text-xs font-bold text-gray-800 uppercase tracking-widest shadow-sm">
             <Activity className="w-3 h-3 text-blue-600 animate-pulse" />
@@ -122,6 +133,7 @@ export default function Submissions() {
         ))}
       </div>
 
+      </div>
     </div>
   );
 }
