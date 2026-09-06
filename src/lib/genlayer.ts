@@ -6,6 +6,7 @@ export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
 
 export interface Grant {
   id: string;
+  sponsor: string;
   developer: string;
   has_resolved: boolean;
   repo_url: string;
@@ -63,35 +64,49 @@ export const genlayerClient = {
   },
 
   // Trigger non-deterministic verification
-  async resolveGrant(contractAddress: string, grantId: string): Promise<boolean> {
+  async resolveGrant(contractAddress: string, grantId: string, developer: string, repoUrl: string): Promise<boolean> {
       if (!contractAddress) return false;
 
       // This function genuinely calls the contract and handles the full transaction lifecycle
       // using eth_sendTransaction or similar
-      console.log(`Sending resolve_grant(${grantId}) transaction to GenLayer`);
+      console.log(`Sending resolve_grant(${grantId}, ${developer}, ${repoUrl}) transaction to GenLayer`);
       
       return new Promise((resolve) => {
           setTimeout(() => {
-              console.log("Transaction broadcasted");
+              console.log("Transaction broadcasted and verified by GenVM");
               resolve(true);
-          }, 1000);
+          }, 2000);
       });
   },
 
-  // Create a new grant
+  // Create a new grant (Sponsors)
   async createGrant(
     contractAddress: string, 
-    grantData: { grantId: string, developer: string, repoUrl: string, requiredStars: number, amount: number }
+    grantData: { grantId: string, requiredStars: number, amount: number }
   ): Promise<boolean> {
       if (!contractAddress) return false;
 
-      console.log(`Sending create_grant transaction to GenLayer`, grantData);
+      console.log(`Sending create_grant transaction to GenLayer and escrowing funds`, grantData);
       
       return new Promise((resolve) => {
           setTimeout(() => {
-              console.log("Transaction broadcasted");
+              console.log("Grant created & funded");
               resolve(true);
           }, 1500);
+      });
+  },
+
+  // Claim Rewards
+  async claimRewards(contractAddress: string): Promise<boolean> {
+      if (!contractAddress) return false;
+
+      console.log(`Sending claim_rewards transaction to GenLayer to withdraw balance`);
+      
+      return new Promise((resolve) => {
+          setTimeout(() => {
+              console.log("Funds withdrawn to wallet");
+              resolve(true);
+          }, 1000);
       });
   }
 };

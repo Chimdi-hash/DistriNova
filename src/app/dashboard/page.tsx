@@ -2,23 +2,25 @@
 
 import React, { useState } from "react";
 import { useWallet } from "../../context/WalletContext";
-import { PlusCircle, Search, CheckCircle, Clock } from "lucide-react";
+import React, { useState } from "react";
+import { useWallet } from "../../context/WalletContext";
+import { PlusCircle, Search, CheckCircle, Clock, ExternalLink } from "lucide-react";
 
 export default function Dashboard() {
-  const { isConnected } = useWallet();
+  const { isConnected, walletAddress } = useWallet();
   const [activeTab, setActiveTab] = useState("explore");
   const [grants, setGrants] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Modal State
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // Create Modal State
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [createData, setCreateData] = useState({ requiredStars: 1000, amount: 5000 });
+
+  // Submit Modal State
+  const [submitGrantId, setSubmitGrantId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    developer: "",
-    repoUrl: "",
-    requiredStars: 1000,
-    amount: 5000
-  });
+  const [submitData, setSubmitData] = useState({ developer: "", repoUrl: "" });
 
   React.useEffect(() => {
     import("../../lib/genlayer").then(({ genlayerClient }) => {
@@ -31,20 +33,39 @@ export default function Dashboard() {
 
   const handleCreateGrant = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    setIsCreating(true);
     try {
       const { genlayerClient } = await import("../../lib/genlayer");
       await genlayerClient.createGrant("", {
         grantId: Math.random().toString(36).substring(7),
-        ...formData
+        ...createData
       });
-      setIsModalOpen(false);
-      // Ideally we would refetch grants here, but for now we just close it
+      setIsCreateModalOpen(false);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  const handleResolveGrant = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!submitGrantId) return;
+    setIsSubmitting(true);
+    try {
+      const { genlayerClient } = await import("../../lib/genlayer");
+      await genlayerClient.resolveGrant("", submitGrantId, submitData.developer, submitData.repoUrl);
+      setSubmitGrantId(null);
     } catch (err) {
       console.error(err);
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleClaim = async (grantId: string) => {
+      const { genlayerClient } = await import("../../lib/genlayer");
+      await genlayerClient.claimRewards("");
   };
 
   return (
@@ -57,11 +78,11 @@ export default function Dashboard() {
         
         {isConnected && (
           <button 
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsCreateModalOpen(true)}
             className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:bg-blue-700 transition"
           >
             <PlusCircle className="w-4 h-4" />
-            Create Grant
+            Sponsor a Grant
           </button>
         )}
       </div>
@@ -97,73 +118,70 @@ export default function Dashboard() {
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {grants.map((grant) => (
+          {grants.filter(g => activeTab === "explore" || g.developer === walletAddress || g.sponsor === walletAddress).map((grant) => (
             <div key={grant.id} className="glass-card p-6 flex flex-col hover:shadow-lg transition-shadow border border-white/60">
               <div className="flex justify-between items-start mb-4">
                 <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold border ${grant.has_resolved ? "bg-green-100 text-green-800 border-green-200" : "bg-blue-100 text-blue-800 border-blue-200"}`}>
                   {grant.has_resolved ? <CheckCircle className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
-                  {grant.has_resolved ? "Resolved" : "Active"}
+                  {grant.has_resolved ? "Resolved" : "Open Grant"}
                 </span>
                 <span className="font-mono text-sm font-bold text-gray-900 bg-white/60 px-2 py-1 rounded">{grant.amount} GEN</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">Grant #{grant.id}</h3>
-              <p className="text-sm text-gray-600 mb-4 flex-grow line-clamp-2">Target Repo: {grant.repo_url}</p>
               
               <div className="bg-white/40 p-3 rounded-lg mb-4 text-xs font-medium text-gray-700 flex flex-col gap-1">
                 <div className="flex justify-between">
-                  <span>Required Stars:</span>
-                  <span className="font-bold">{grant.required_stars}</span>
+                  <span>Target:</span>
+                  <span className="font-bold">{grant.required_stars} Stars</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Status:</span>
-                  <span className={grant.has_resolved ? "text-green-700 font-bold" : "font-mono"}>
-                    {grant.has_resolved ? "Verified by GenVM" : "Verification Pending"}
-                  </span>
+                <div className="flex justify-between mt-1 pt-1 border-t border-gray-200/50">
+                  <span>Sponsor:</span>
+                  <span className="font-mono text-gray-500">{grant.sponsor ? grant.sponsor.substring(0,6) + '...' : 'Unknown'}</span>
                 </div>
+                {grant.developer && (
+                  <div className="flex justify-between">
+                    <span>Developer:</span>
+                    <span className="font-mono text-gray-500">{grant.developer.substring(0,6)}...</span>
+                  </div>
+                )}
               </div>
               
-              <button 
-                className={`w-full py-2 rounded-lg text-sm font-bold transition ${grant.has_resolved ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-gray-900 text-white hover:bg-gray-800"}`}
-                disabled={grant.has_resolved || !isConnected}
-              >
-                {grant.has_resolved ? "Already Claimed" : "Verify & Claim"}
-              </button>
+              {grant.has_resolved && grant.developer === walletAddress ? (
+                <button 
+                  onClick={() => handleClaim(grant.id)}
+                  className="w-full py-2 rounded-lg text-sm font-bold transition bg-green-600 text-white hover:bg-green-700 shadow-md flex items-center justify-center gap-2"
+                >
+                  Withdraw {grant.amount} GEN
+                </button>
+              ) : grant.has_resolved ? (
+                <button disabled className="w-full py-2 rounded-lg text-sm font-bold transition bg-gray-200 text-gray-500 cursor-not-allowed">
+                  Already Claimed by Developer
+                </button>
+              ) : (
+                <button 
+                  onClick={() => {
+                     setSubmitData({ developer: walletAddress || "", repoUrl: "" });
+                     setSubmitGrantId(grant.id);
+                  }}
+                  className="w-full py-2 rounded-lg text-sm font-bold transition bg-gray-900 text-white hover:bg-gray-800"
+                  disabled={!isConnected}
+                >
+                  Submit & Verify
+                </button>
+              )}
             </div>
           ))}
         </div>
       )}
 
-      {/* Create Grant Modal */}
-      {isModalOpen && (
+      {/* Create Grant (Sponsor) Modal */}
+      {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4">
           <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/60 p-8 w-full max-w-md shadow-2xl">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New Grant</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Sponsor a New Grant</h2>
+            <p className="text-gray-600 text-sm mb-6">Deposit GEN into the contract escrow. Any developer who meets your star requirement can claim it.</p>
             
             <form onSubmit={handleCreateGrant} className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Developer Wallet Address</label>
-                <input 
-                  type="text" 
-                  required
-                  placeholder="0x..."
-                  value={formData.developer}
-                  onChange={(e) => setFormData({...formData, developer: e.target.value})}
-                  className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">GitHub Repo URL</label>
-                <input 
-                  type="url" 
-                  required
-                  placeholder="https://github.com/user/repo"
-                  value={formData.repoUrl}
-                  onChange={(e) => setFormData({...formData, repoUrl: e.target.value})}
-                  className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">Required Stars</label>
@@ -171,8 +189,8 @@ export default function Dashboard() {
                     type="number" 
                     required
                     min="1"
-                    value={formData.requiredStars}
-                    onChange={(e) => setFormData({...formData, requiredStars: parseInt(e.target.value) || 0})}
+                    value={createData.requiredStars}
+                    onChange={(e) => setCreateData({...createData, requiredStars: parseInt(e.target.value) || 0})}
                     className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -182,8 +200,8 @@ export default function Dashboard() {
                     type="number" 
                     required
                     min="1"
-                    value={formData.amount}
-                    onChange={(e) => setFormData({...formData, amount: parseInt(e.target.value) || 0})}
+                    value={createData.amount}
+                    onChange={(e) => setCreateData({...createData, amount: parseInt(e.target.value) || 0})}
                     className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -192,7 +210,60 @@ export default function Dashboard() {
               <div className="flex gap-3 mt-8">
                 <button 
                   type="button" 
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={() => setIsCreateModalOpen(false)}
+                  className="flex-1 py-2.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  disabled={isCreating}
+                  className="flex-1 py-2.5 rounded-lg text-sm font-bold bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-50"
+                >
+                  {isCreating ? "Escrowing..." : "Deposit & Create"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Submit & Verify (Developer) Modal */}
+      {submitGrantId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4">
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/60 p-8 w-full max-w-md shadow-2xl">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Submit to Grant #{submitGrantId}</h2>
+            <p className="text-gray-600 text-sm mb-6">GenVM will instantly check your repo. If you meet the required stars, the funds will be released to your wallet.</p>
+            
+            <form onSubmit={handleResolveGrant} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Your Wallet Address</label>
+                <input 
+                  type="text" 
+                  required
+                  value={submitData.developer}
+                  onChange={(e) => setSubmitData({...submitData, developer: e.target.value})}
+                  className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm text-gray-500"
+                  readOnly
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">GitHub Repo URL</label>
+                <input 
+                  type="url" 
+                  required
+                  placeholder="https://github.com/your-username/repo"
+                  value={submitData.repoUrl}
+                  onChange={(e) => setSubmitData({...submitData, repoUrl: e.target.value})}
+                  className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="flex gap-3 mt-8">
+                <button 
+                  type="button" 
+                  onClick={() => setSubmitGrantId(null)}
                   className="flex-1 py-2.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
                 >
                   Cancel
@@ -200,9 +271,9 @@ export default function Dashboard() {
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="flex-1 py-2.5 rounded-lg text-sm font-bold bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-50"
+                  className="flex-1 py-2.5 rounded-lg text-sm font-bold bg-gray-900 text-white hover:bg-gray-800 transition disabled:opacity-50"
                 >
-                  {isSubmitting ? "Sponsoring..." : "Sponsor Grant"}
+                  {isSubmitting ? "GenVM Validating..." : "Verify & Claim"}
                 </button>
               </div>
             </form>
