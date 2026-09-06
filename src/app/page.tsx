@@ -31,7 +31,7 @@ export default function Home() {
       </div>
       
       {/* Full-width Hero Background Image */}
-      <div className="absolute top-0 left-0 right-0 h-[600px] md:h-[700px] z-0 opacity-20">
+      <div className="absolute top-0 left-0 right-0 h-[600px] md:h-[700px] z-0 opacity-40">
          <div 
            className="absolute inset-0 w-full h-full bg-no-repeat bg-cover bg-center"
            style={{ 
@@ -51,14 +51,14 @@ export default function Home() {
             Live on GenLayer Studio Network
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tighter mb-6 leading-tight max-w-2xl">
+          <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tighter mb-6 leading-tight max-w-4xl">
             The Future of <br className="hidden xl:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-pink-600 drop-shadow-sm">
               Decentralized Grants
             </span>
           </h1>
           
-          <p className="text-xl text-gray-700 max-w-xl font-medium mb-10 leading-relaxed border-l-2 border-blue-500/30 pl-4 ml-1">
+          <p className="text-xl text-gray-700 max-w-3xl font-medium mb-10 leading-relaxed border-l-2 border-blue-500/30 pl-4 ml-1">
             DistriNova uses GenLayer Intelligent Contracts to autonomously verify real-world startup milestones and securely release funds.
           </p>
           
