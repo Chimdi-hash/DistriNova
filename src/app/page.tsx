@@ -30,10 +30,23 @@ export default function Home() {
         <div className="absolute bottom-[10%] left-[40%] w-[600px] h-[600px] bg-white rounded-full mix-blend-overlay filter blur-[150px] opacity-50 floating" style={{ animationDuration: "12s", animationDelay: "4s" }}></div>
       </div>
       
-      {/* Full-width Hero Background Image */}
-      <div className="absolute top-0 left-0 right-0 h-[500px] md:h-[700px] z-0 opacity-40">
+      {/* Desktop Hero Background Image */}
+      <div className="absolute top-0 left-0 right-0 h-[700px] z-0 opacity-40 hidden md:block">
          <div 
-           className="absolute inset-0 w-full h-full bg-no-repeat bg-contain bg-top md:bg-cover md:bg-center"
+           className="absolute inset-0 w-full h-full bg-no-repeat bg-cover bg-center"
+           style={{ 
+             backgroundImage: "url('/hero.jpeg')",
+             WebkitMaskImage: "linear-gradient(to bottom, black 20%, transparent 100%)",
+             maskImage: "linear-gradient(to bottom, black 20%, transparent 100%)"
+           }}
+         ></div>
+      </div>
+
+      {/* Mobile Hero Background Image */}
+      {/* Uses a percentage padding trick to maintain aspect ratio roughly matching the image, ensuring the fade exactly hits the base */}
+      <div className="absolute top-0 left-0 right-0 w-full pt-[65%] z-0 opacity-40 md:hidden">
+         <div 
+           className="absolute inset-0 w-full h-full bg-no-repeat bg-[length:100%_auto] bg-top"
            style={{ 
              backgroundImage: "url('/hero.jpeg')",
              WebkitMaskImage: "linear-gradient(to bottom, black 20%, transparent 100%)",
