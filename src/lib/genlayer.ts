@@ -1,6 +1,7 @@
 // GenLayer Studio API Integration
 // This connects the frontend to the DistriNovaGrants.py Intelligent Contract
 import { createClient } from "genlayer-js";
+import { TransactionStatus } from "genlayer-js/types";
 
 export const GENLAYER_STUDIO_RPC = process.env.NEXT_PUBLIC_GENLAYER_RPC || "https://studio.genlayer.com/rpc";
 export const CONTRACT_ADDRESS = "0xf68e55250AB7E767484b8C5D55538b275597c0d8";
@@ -39,7 +40,7 @@ export const genlayerClient = {
         functionName: "get_grants",
         args: []
       });
-      return (data as Record<string, Grant>) || {};
+      return (data as unknown as Record<string, Grant>) || {};
     } catch (e) {
       console.error("Failed to fetch grants from GenLayer:", e);
       return {};
@@ -56,10 +57,11 @@ export const genlayerClient = {
         const hash = await client.writeContract({
           address: contractAddress as `0x${string}`,
           functionName: "resolve_grant",
-          args: [grantId, developerName, developer, repoUrl]
+          args: [grantId, developerName, developer, repoUrl],
+          value: 0n
         });
         
-        await client.waitForTransactionReceipt({ hash, status: "FINALIZED" });
+        await client.waitForTransactionReceipt({ hash, status: TransactionStatus.FINALIZED });
         return true;
       } catch (err) {
         console.error("resolveGrant error:", err);
@@ -80,10 +82,11 @@ export const genlayerClient = {
         const hash = await client.writeContract({
           address: contractAddress as `0x${string}`,
           functionName: "create_grant",
-          args: [grantData.grantId, grantData.requiredStars, grantData.amount]
+          args: [grantData.grantId, grantData.requiredStars, grantData.amount],
+          value: 0n
         });
         
-        await client.waitForTransactionReceipt({ hash, status: "FINALIZED" });
+        await client.waitForTransactionReceipt({ hash, status: TransactionStatus.FINALIZED });
         return true;
       } catch (err) {
         console.error("createGrant error:", err);
@@ -101,10 +104,11 @@ export const genlayerClient = {
         const hash = await client.writeContract({
           address: contractAddress as `0x${string}`,
           functionName: "claim_rewards",
-          args: []
+          args: [],
+          value: 0n
         });
         
-        await client.waitForTransactionReceipt({ hash, status: "FINALIZED" });
+        await client.waitForTransactionReceipt({ hash, status: TransactionStatus.FINALIZED });
         return true;
       } catch (err) {
         console.error("claimRewards error:", err);
@@ -112,4 +116,3 @@ export const genlayerClient = {
       }
   }
 };
-
