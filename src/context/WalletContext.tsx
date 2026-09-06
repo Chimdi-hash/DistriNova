@@ -56,9 +56,19 @@ export function WalletProvider({ children }: { children: ReactNode }) {
           }
         }
 
+        // Fetch real balance from the network
+        const rawBalance = await ethereum.request({
+          method: 'eth_getBalance',
+          params: [accounts[0], 'latest']
+        });
+        
+        // Convert hex (wei) to decimal (GEN)
+        const balanceInWei = parseInt(rawBalance, 16);
+        const balanceInGen = balanceInWei / 1e18;
+
         setWalletAddress(accounts[0]);
         setIsConnected(true);
-        setBalance(5000); // Set mock balance for display purposes
+        setBalance(parseFloat(balanceInGen.toFixed(4))); 
       } catch (error) {
         console.error("User denied account access or error occurred:", error);
       }

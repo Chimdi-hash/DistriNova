@@ -56,7 +56,9 @@ export default function Header() {
                   </div>
                   <div className="h-8 w-px bg-gray-300"></div>
                   <div className="flex items-center gap-2 bg-white/50 border border-white/60 rounded-full px-3 py-1.5 shadow-sm">
-                    <span className="text-sm font-medium text-gray-800">{walletAddress}</span>
+                    <span className="text-sm font-medium text-gray-800">
+                      {walletAddress ? `${walletAddress.substring(0, 6)}...${walletAddress.substring(walletAddress.length - 4)}` : ""}
+                    </span>
                     <button
                       onClick={disconnectWallet}
                       className="text-gray-500 hover:text-red-600 transition-colors p-1 rounded-full hover:bg-red-50"
@@ -113,7 +115,9 @@ export default function Header() {
                     <span className="text-sm font-bold text-gray-900">{balance.toLocaleString()} GEN</span>
                   </div>
                   <div className="flex justify-between items-center bg-white/40 p-3 rounded-xl border border-white/60">
-                    <span className="text-sm font-medium text-gray-800">{walletAddress}</span>
+                    <span className="text-sm font-medium text-gray-800">
+                      {walletAddress ? `${walletAddress.substring(0, 6)}...${walletAddress.substring(walletAddress.length - 4)}` : ""}
+                    </span>
                     <button
                       onClick={() => { disconnectWallet(); setIsMobileMenuOpen(false); }}
                       className="flex items-center gap-1 text-sm text-red-600 font-bold hover:text-red-700 transition-colors"
