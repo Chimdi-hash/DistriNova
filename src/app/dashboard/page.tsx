@@ -9,6 +9,16 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("explore");
   const [grants, setGrants] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    developer: "",
+    repoUrl: "",
+    requiredStars: 1000,
+    amount: 5000
+  });
 
   React.useEffect(() => {
     import("../../lib/genlayer").then(({ genlayerClient }) => {
@@ -19,6 +29,24 @@ export default function Dashboard() {
     });
   }, []);
 
+  const handleCreateGrant = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const { genlayerClient } = await import("../../lib/genlayer");
+      await genlayerClient.createGrant("", {
+        grantId: Math.random().toString(36).substring(7),
+        ...formData
+      });
+      setIsModalOpen(false);
+      // Ideally we would refetch grants here, but for now we just close it
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -28,7 +56,10 @@ export default function Dashboard() {
         </div>
         
         {isConnected && (
-          <button className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:bg-blue-700 transition">
+          <button 
+            onClick={() => setIsModalOpen(true)}
+            className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:bg-blue-700 transition"
+          >
             <PlusCircle className="w-4 h-4" />
             Create Grant
           </button>
@@ -99,6 +130,83 @@ export default function Dashboard() {
               </button>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Create Grant Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4">
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/60 p-8 w-full max-w-md shadow-2xl">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New Grant</h2>
+            
+            <form onSubmit={handleCreateGrant} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Developer Wallet Address</label>
+                <input 
+                  type="text" 
+                  required
+                  placeholder="0x..."
+                  value={formData.developer}
+                  onChange={(e) => setFormData({...formData, developer: e.target.value})}
+                  className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">GitHub Repo URL</label>
+                <input 
+                  type="url" 
+                  required
+                  placeholder="https://github.com/user/repo"
+                  value={formData.repoUrl}
+                  onChange={(e) => setFormData({...formData, repoUrl: e.target.value})}
+                  className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Required Stars</label>
+                  <input 
+                    type="number" 
+                    required
+                    min="1"
+                    value={formData.requiredStars}
+                    onChange={(e) => setFormData({...formData, requiredStars: parseInt(e.target.value) || 0})}
+                    className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Payout (GEN)</label>
+                  <input 
+                    type="number" 
+                    required
+                    min="1"
+                    value={formData.amount}
+                    onChange={(e) => setFormData({...formData, amount: parseInt(e.target.value) || 0})}
+                    className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-8">
+                <button 
+                  type="button" 
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex-1 py-2.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="flex-1 py-2.5 rounded-lg text-sm font-bold bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-50"
+                >
+                  {isSubmitting ? "Sponsoring..." : "Sponsor Grant"}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

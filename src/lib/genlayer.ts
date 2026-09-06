@@ -76,5 +76,22 @@ export const genlayerClient = {
               resolve(true);
           }, 1000);
       });
+  },
+
+  // Create a new grant
+  async createGrant(
+    contractAddress: string, 
+    grantData: { grantId: string, developer: string, repoUrl: string, requiredStars: number, amount: number }
+  ): Promise<boolean> {
+      if (!contractAddress) return false;
+
+      console.log(`Sending create_grant transaction to GenLayer`, grantData);
+      
+      return new Promise((resolve) => {
+          setTimeout(() => {
+              console.log("Transaction broadcasted");
+              resolve(true);
+          }, 1500);
+      });
   }
 };
