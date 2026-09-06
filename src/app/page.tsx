@@ -30,16 +30,14 @@ export default function Home() {
         <div className="absolute bottom-[10%] left-[40%] w-[600px] h-[600px] bg-white rounded-full mix-blend-overlay filter blur-[150px] opacity-50 floating" style={{ animationDuration: "12s", animationDelay: "4s" }}></div>
       </div>
       
-      {/* Full-bleed Hero Image on the Right */}
-      <div className="absolute right-0 top-0 h-[450px] md:h-[550px] w-full md:w-[70%] lg:w-[60%] z-0 hidden md:block">
+      {/* Full-width Hero Background Image */}
+      <div className="absolute top-0 left-0 right-0 h-[600px] md:h-[700px] z-0 opacity-20">
          <div 
-           className="absolute inset-0 w-full h-full bg-no-repeat"
+           className="absolute inset-0 w-full h-full bg-no-repeat bg-cover bg-center"
            style={{ 
              backgroundImage: "url('/hero.jpeg')",
-             backgroundSize: "cover",
-             backgroundPosition: "center right",
-             WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 25%)",
-             maskImage: "linear-gradient(to right, transparent 0%, black 25%)"
+             WebkitMaskImage: "linear-gradient(to bottom, black 50%, transparent 100%)",
+             maskImage: "linear-gradient(to bottom, black 50%, transparent 100%)"
            }}
          ></div>
       </div>
@@ -47,7 +45,7 @@ export default function Home() {
       <div className="z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         
         {/* Hero Section */}
-        <div className="w-full flex flex-col items-start text-left mt-24 mb-16 sliding -ml-4 md:-ml-12 lg:-ml-20 relative z-20">
+        <div className="w-full flex flex-col items-start text-left mt-24 mb-16 sliding relative z-20">
           
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/30 border border-white/50 backdrop-blur-md mb-8 text-xs font-semibold text-gray-800 shadow-sm hover:bg-white/40 transition-colors">
             Live on GenLayer Studio Network
