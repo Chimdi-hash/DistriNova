@@ -137,20 +137,26 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
-            {[1, 2].map((item) => (
-              <div key={item} className="bg-white/30 backdrop-blur-md border border-white/50 p-6 rounded-[1.5rem] hover:bg-white/40 transition-colors shadow-sm">
-                <div className="flex justify-between items-start mb-4">
-                  <h4 className="font-bold text-gray-900 text-lg">DeFi Analytics Dashboard</h4>
-                  <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold bg-green-100/80 text-green-800">
-                    <CheckCircle className="w-3 h-3" /> VERIFIED
-                  </span>
+            {isLoading ? (
+               <div className="col-span-2 text-center text-gray-500 py-10">Loading from GenLayer network...</div>
+            ) : recentGrants.length === 0 ? (
+               <div className="col-span-2 glass-card py-12 text-center text-gray-500 font-medium">No verified submissions yet on the Studio Network.</div>
+            ) : (
+              recentGrants.map((grant) => (
+                <div key={grant.id} className="bg-white/30 backdrop-blur-md border border-white/50 p-6 rounded-[1.5rem] hover:bg-white/40 transition-colors shadow-sm">
+                  <div className="flex justify-between items-start mb-4">
+                    <h4 className="font-bold text-gray-900 text-lg">Grant #{grant.id}</h4>
+                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold ${grant.has_resolved ? "bg-green-100/80 text-green-800" : "bg-blue-100/80 text-blue-800"}`}>
+                      <CheckCircle className="w-3 h-3" /> {grant.has_resolved ? "VERIFIED" : "PENDING"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <p className="text-sm text-gray-600">Claimed by <span className="font-mono bg-white/50 px-1 rounded text-xs text-gray-800">{grant.developer.substring(0,6)}...{grant.developer.substring(grant.developer.length-4)}</span></p>
+                    <p className="font-mono font-bold text-gray-900 text-lg">{grant.amount} GEN</p>
+                  </div>
                 </div>
-                <div className="flex justify-between items-end">
-                  <p className="text-sm text-gray-600">Claimed by <span className="font-mono bg-white/50 px-1 rounded text-xs text-gray-800">0x3F...9a1</span></p>
-                  <p className="font-mono font-bold text-gray-900 text-lg">10,000 GEN</p>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
           <Link href="/submissions" className="text-sm font-bold text-gray-600 hover:text-gray-900 transition-colors sm:hidden block mt-6 text-center">
             View All Submissions →

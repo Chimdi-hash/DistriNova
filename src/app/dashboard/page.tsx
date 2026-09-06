@@ -7,6 +7,17 @@ import { PlusCircle, Search, CheckCircle, Clock } from "lucide-react";
 export default function Dashboard() {
   const { isConnected } = useWallet();
   const [activeTab, setActiveTab] = useState("explore");
+  const [grants, setGrants] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  React.useEffect(() => {
+    import("../../lib/genlayer").then(({ genlayerClient }) => {
+      genlayerClient.getGrants().then((data) => {
+        setGrants(Object.values(data));
+        setIsLoading(false);
+      });
+    });
+  }, []);
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -47,61 +58,47 @@ export default function Dashboard() {
           <h3 className="text-lg font-bold text-gray-900 mb-2">Wallet Not Connected</h3>
           <p className="text-sm text-gray-600 mb-4">Please connect your wallet to view your grants and sponsorships.</p>
         </div>
+      ) : isLoading ? (
+        <div className="text-center py-20 text-gray-500 font-medium">Loading from GenLayer network...</div>
+      ) : grants.length === 0 ? (
+        <div className="glass-card p-12 text-center text-gray-500 font-medium">
+          No grants found on the Studio Network yet.
+        </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Mock Grant Card */}
-          <div className="glass-card p-6 flex flex-col hover:shadow-lg transition-shadow border border-white/60">
-            <div className="flex justify-between items-start mb-4">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">
-                <Clock className="w-3 h-3" /> Active
-              </span>
-              <span className="font-mono text-sm font-bold text-gray-900 bg-white/60 px-2 py-1 rounded">5,000 GEN</span>
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">Agentic Swarm Framework</h3>
-            <p className="text-sm text-gray-600 mb-4 flex-grow line-clamp-2">Build a swarm framework for GenVM with at least 1,000 GitHub stars.</p>
-            
-            <div className="bg-white/40 p-3 rounded-lg mb-4 text-xs font-medium text-gray-700 flex flex-col gap-1">
-              <div className="flex justify-between">
-                <span>Required:</span>
-                <span className="font-bold">1,000 Stars</span>
+          {grants.map((grant) => (
+            <div key={grant.id} className="glass-card p-6 flex flex-col hover:shadow-lg transition-shadow border border-white/60">
+              <div className="flex justify-between items-start mb-4">
+                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold border ${grant.has_resolved ? "bg-green-100 text-green-800 border-green-200" : "bg-blue-100 text-blue-800 border-blue-200"}`}>
+                  {grant.has_resolved ? <CheckCircle className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
+                  {grant.has_resolved ? "Resolved" : "Active"}
+                </span>
+                <span className="font-mono text-sm font-bold text-gray-900 bg-white/60 px-2 py-1 rounded">{grant.amount} GEN</span>
               </div>
-              <div className="flex justify-between">
-                <span>Current:</span>
-                <span className="font-mono">Verification Pending</span>
+              <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">Grant #{grant.id}</h3>
+              <p className="text-sm text-gray-600 mb-4 flex-grow line-clamp-2">Target Repo: {grant.repo_url}</p>
+              
+              <div className="bg-white/40 p-3 rounded-lg mb-4 text-xs font-medium text-gray-700 flex flex-col gap-1">
+                <div className="flex justify-between">
+                  <span>Required Stars:</span>
+                  <span className="font-bold">{grant.required_stars}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Status:</span>
+                  <span className={grant.has_resolved ? "text-green-700 font-bold" : "font-mono"}>
+                    {grant.has_resolved ? "Verified by GenVM" : "Verification Pending"}
+                  </span>
+                </div>
               </div>
+              
+              <button 
+                className={`w-full py-2 rounded-lg text-sm font-bold transition ${grant.has_resolved ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-gray-900 text-white hover:bg-gray-800"}`}
+                disabled={grant.has_resolved || !isConnected}
+              >
+                {grant.has_resolved ? "Already Claimed" : "Verify & Claim"}
+              </button>
             </div>
-            
-            <button className="w-full py-2 bg-gray-900 text-white rounded-lg text-sm font-bold hover:bg-gray-800 transition disabled:opacity-50" disabled={!isConnected}>
-              Verify & Claim
-            </button>
-          </div>
-
-          {/* Another Mock Grant Card */}
-          <div className="glass-card p-6 flex flex-col hover:shadow-lg transition-shadow border border-white/60">
-            <div className="flex justify-between items-start mb-4">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-green-100 text-green-800 border border-green-200">
-                <CheckCircle className="w-3 h-3" /> Resolved
-              </span>
-              <span className="font-mono text-sm font-bold text-gray-900 bg-white/60 px-2 py-1 rounded">2,500 GEN</span>
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">Studio Network Explorer</h3>
-            <p className="text-sm text-gray-600 mb-4 flex-grow line-clamp-2">A block explorer dedicated to the GenLayer Studio Network.</p>
-            
-            <div className="bg-white/40 p-3 rounded-lg mb-4 text-xs font-medium text-gray-700 flex flex-col gap-1">
-              <div className="flex justify-between">
-                <span>Required:</span>
-                <span className="font-bold">Live URL</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Result:</span>
-                <span className="text-green-700 font-bold">Verified by GenVM</span>
-              </div>
-            </div>
-            
-            <button className="w-full py-2 bg-gray-200 text-gray-500 rounded-lg text-sm font-bold cursor-not-allowed">
-              Already Claimed
-            </button>
-          </div>
+          ))}
         </div>
       )}
     </div>
