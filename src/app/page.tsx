@@ -31,13 +31,13 @@ export default function Home() {
       </div>
       
       {/* Full-width Hero Background Image */}
-      <div className="absolute top-0 left-0 right-0 h-[600px] md:h-[700px] z-0 opacity-40">
+      <div className="absolute top-0 left-0 right-0 h-[500px] md:h-[700px] z-0 opacity-40">
          <div 
-           className="absolute inset-0 w-full h-full bg-no-repeat bg-cover bg-center"
+           className="absolute inset-0 w-full h-full bg-no-repeat bg-contain bg-top md:bg-cover md:bg-center"
            style={{ 
              backgroundImage: "url('/hero.jpeg')",
-             WebkitMaskImage: "linear-gradient(to bottom, black 50%, transparent 100%)",
-             maskImage: "linear-gradient(to bottom, black 50%, transparent 100%)"
+             WebkitMaskImage: "linear-gradient(to bottom, black 20%, transparent 100%)",
+             maskImage: "linear-gradient(to bottom, black 20%, transparent 100%)"
            }}
          ></div>
       </div>
@@ -45,31 +45,29 @@ export default function Home() {
       <div className="z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         
         {/* Hero Section */}
-        <div className="w-full flex flex-col items-start text-left mt-12 sm:mt-24 mb-12 sm:mb-16 sliding relative z-20">
+        <div className="w-full flex flex-col items-start text-left mt-24 mb-16 sliding relative z-20">
           
-          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/30 border border-white/50 backdrop-blur-md mb-6 sm:mb-8 text-[10px] sm:text-xs font-semibold text-gray-800 shadow-sm hover:bg-white/40 transition-colors">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/30 border border-white/50 backdrop-blur-md mb-8 text-xs font-semibold text-gray-800 shadow-sm hover:bg-white/40 transition-colors">
             Live on GenLayer Studio Network
           </div>
           
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tighter mb-4 sm:mb-6 leading-tight max-w-4xl relative">
-            <span className="relative z-10">The Future of</span> <br className="block xl:hidden" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-pink-600 drop-shadow-sm relative z-10">
+          <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tighter mb-6 leading-tight max-w-4xl">
+            The Future of <br className="hidden xl:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-pink-600 drop-shadow-sm">
               Decentralized Grants
             </span>
-            {/* Subtle mobile text glow */}
-            <span className="absolute -inset-4 bg-white/20 blur-xl rounded-full z-0 sm:hidden block"></span>
           </h1>
           
-          <p className="text-lg sm:text-xl text-gray-700 max-w-3xl font-medium mb-8 sm:mb-10 leading-relaxed border-l-2 border-blue-500/50 pl-4 ml-1 relative z-10 bg-white/10 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none p-2 sm:p-0 rounded-r-xl">
+          <p className="text-xl text-gray-700 max-w-3xl font-medium mb-10 leading-relaxed border-l-2 border-blue-500/30 pl-4 ml-1">
             DistriNova uses GenLayer Intelligent Contracts to autonomously verify real-world startup milestones and securely release funds.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-start w-full sm:w-auto relative z-10">
-            <Link href="/dashboard" className="inline-flex justify-center items-center gap-2 px-8 py-3.5 sm:py-3 text-sm bg-gray-900 text-white rounded-full font-bold shadow-xl hover:bg-gray-800 hover:translate-x-1 sm:hover:-translate-y-1 transition-all duration-300 group">
+          <div className="flex flex-col sm:flex-row gap-4 items-start">
+            <Link href="/dashboard" className="inline-flex items-center gap-2 px-8 py-3 text-sm bg-gray-900 text-white rounded-full font-bold shadow-xl hover:bg-gray-800 hover:translate-x-1 transition-all duration-300 group">
               Explore Dashboard
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link href="/faq" className="inline-flex justify-center items-center gap-2 px-8 py-3.5 sm:py-3 text-sm bg-white/60 sm:bg-white/40 backdrop-blur-md border border-white/80 sm:border-white/60 text-gray-900 rounded-full font-bold shadow-sm hover:bg-white/80 sm:hover:bg-white/60 sm:hover:translate-x-1 transition-all duration-300">
+            <Link href="/faq" className="inline-flex items-center gap-2 px-8 py-3 text-sm bg-white/40 backdrop-blur-md border border-white/60 text-gray-900 rounded-full font-bold shadow-sm hover:bg-white/60 hover:translate-x-1 transition-all duration-300">
               Learn More
             </Link>
           </div>
