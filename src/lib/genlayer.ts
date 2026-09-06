@@ -58,7 +58,7 @@ export const genlayerClient = {
           address: contractAddress as `0x${string}`,
           functionName: "resolve_grant",
           args: [grantId, developerName, developer, repoUrl],
-          value: 0n
+          value: BigInt(0)
         });
         
         await client.waitForTransactionReceipt({ hash, status: TransactionStatus.FINALIZED });
@@ -83,7 +83,7 @@ export const genlayerClient = {
           address: contractAddress as `0x${string}`,
           functionName: "create_grant",
           args: [grantData.grantId, grantData.requiredStars, grantData.amount],
-          value: 0n
+          value: BigInt(0)
         });
         
         await client.waitForTransactionReceipt({ hash, status: TransactionStatus.FINALIZED });
@@ -105,7 +105,7 @@ export const genlayerClient = {
           address: contractAddress as `0x${string}`,
           functionName: "claim_rewards",
           args: [],
-          value: 0n
+          value: BigInt(0)
         });
         
         await client.waitForTransactionReceipt({ hash, status: TransactionStatus.FINALIZED });
