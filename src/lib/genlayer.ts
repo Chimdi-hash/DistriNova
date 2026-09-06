@@ -64,12 +64,12 @@ export const genlayerClient = {
   },
 
   // Trigger non-deterministic verification
-  async resolveGrant(contractAddress: string, grantId: string, developer: string, repoUrl: string): Promise<boolean> {
+  async resolveGrant(contractAddress: string, grantId: string, developerName: string, developer: string, repoUrl: string): Promise<boolean> {
       if (!contractAddress) return false;
 
       // This function genuinely calls the contract and handles the full transaction lifecycle
       // using eth_sendTransaction or similar
-      console.log(`Sending resolve_grant(${grantId}, ${developer}, ${repoUrl}) transaction to GenLayer`);
+      console.log(`Sending resolve_grant(${grantId}, ${developerName}, ${developer}, ${repoUrl}) transaction to GenLayer`);
       
       return new Promise((resolve) => {
           setTimeout(() => {

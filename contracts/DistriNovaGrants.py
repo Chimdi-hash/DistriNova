@@ -21,20 +21,22 @@ class DistriNovaGrants(gl.Contract):
     def __init__(self):
         pass
 
-    def _check_milestone(self, repo_url: str) -> dict:
+    def _check_milestone(self, repo_url: str, expected_name: str) -> dict:
         def get_repo_stats() -> str:
             # Render the github repo page
             web_data = gl.nondet.web.render(repo_url, mode="text")
 
             task = f"""
 Extract the number of stars for the GitHub repository at {repo_url}.
+Also, verify if the exact name "{expected_name}" appears anywhere in the repository page (e.g., as the author, in the readme, or description) to prove ownership.
 
 Web content:
 {web_data}
 
 Respond in JSON format:
 {{
-    "stars": int // The number of stargazers, e.g., 1500. Return -1 if not found.
+    "stars": int, // The number of stargazers, e.g., 1500. Return -1 if not found.
+    "owns_repo": bool // true if the name "{expected_name}" is found in the text, false otherwise.
 }}
 It is mandatory that you respond only using the JSON format above, nothing else.
 Don't include any formatting prefix or suffix.
@@ -69,7 +71,7 @@ Don't include any formatting prefix or suffix.
         self.grants[grant_id] = grant
 
     @gl.public.write
-    def resolve_grant(self, grant_id: str, developer_address: str, repo_url: str) -> None:
+    def resolve_grant(self, grant_id: str, developer_name: str, developer_address: str, repo_url: str) -> None:
         if grant_id not in self.grants:
             raise Exception("Grant not found")
             
@@ -77,12 +79,16 @@ Don't include any formatting prefix or suffix.
         if grant.has_resolved:
             raise Exception("Grant already resolved")
 
-        repo_stats = self._check_milestone(repo_url)
+        repo_stats = self._check_milestone(repo_url, developer_name)
         stars = int(repo_stats.get("stars", -1))
+        owns_repo = bool(repo_stats.get("owns_repo", False))
         
         # Save the attempt data so it is visible publicly
         grant.developer = developer_address
         grant.repo_url = repo_url
+
+        if not owns_repo:
+            raise Exception("Ownership verification failed: Developer Name not found on the GitHub page.")
         
         if stars < 0:
             raise Exception("Failed to fetch repository stars")
