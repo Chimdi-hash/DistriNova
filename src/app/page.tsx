@@ -7,6 +7,7 @@ import { genlayerClient } from "../lib/genlayer";
 
 export default function Home() {
   const [grantCount, setGrantCount] = useState<number>(0);
+  const [recentGrants, setRecentGrants] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -15,6 +16,7 @@ export default function Home() {
       const grants = await genlayerClient.getGrants();
       // Calculate length of the object keys or default to an empty state
       setGrantCount(Object.keys(grants).length);
+      setRecentGrants(Object.values(grants).slice(0, 2));
       setIsLoading(false);
     };
     fetchGrants();
