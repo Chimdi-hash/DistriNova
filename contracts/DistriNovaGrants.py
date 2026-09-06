@@ -11,9 +11,9 @@ class Grant:
     developer: str
     has_resolved: bool
     repo_url: str
-    required_stars: int
-    amount: int
-    real_stars: int
+    required_stars: u256
+    amount: u256
+    real_stars: u256
 
 class DistriNovaGrants(gl.Contract):
     grants: TreeMap[str, Grant]
@@ -65,9 +65,9 @@ Don't include any formatting prefix or suffix.
             developer="",
             has_resolved=False,
             repo_url="",
-            required_stars=required_stars,
-            amount=amount,
-            real_stars=0
+            required_stars=u256(required_stars),
+            amount=u256(amount),
+            real_stars=u256(0)
         )
         self.grants[grant_id] = grant
 
@@ -94,7 +94,7 @@ Don't include any formatting prefix or suffix.
         if stars < 0:
             raise Exception("Failed to fetch repository stars")
             
-        grant.real_stars = stars
+        grant.real_stars = u256(stars)
         
         # If requirements met, release funds to the developer's internal balance
         if stars >= grant.required_stars:
@@ -127,9 +127,9 @@ Don't include any formatting prefix or suffix.
                 "developer": v.developer,
                 "has_resolved": v.has_resolved,
                 "repo_url": v.repo_url,
-                "required_stars": v.required_stars,
-                "amount": v.amount,
-                "real_stars": v.real_stars
+                "required_stars": int(v.required_stars),
+                "amount": int(v.amount),
+                "real_stars": int(v.real_stars)
             }
         return result
 
