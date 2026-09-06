@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { History, CheckCircle, ExternalLink, Activity, Network } from "lucide-react";
 import Link from "next/link";
